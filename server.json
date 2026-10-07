@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "dev.mesharc/mesharc",
+  "title": "MeshArc",
+  "description": "Crawl and scrape websites to clean markdown, and track what changed between crawls.",
+  "websiteUrl": "https://mesharc.dev/mcp",
+  "repository": {
+    "url": "https://github.com/mesharc-org/mesharc-mcp",
+    "source": "github"
+  },
+  "version": "0.3.4",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.mesharc.dev/mcp"
+    }
+  ]
+}
