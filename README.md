@@ -203,7 +203,14 @@ Any client that speaks remote MCP over streamable HTTP, or any client that runs 
 
 ## Source
 
-This repository is the MCP server's home page. The server itself is `mesharc/mcp.py` in [mesharc-org/mesharc-python](https://github.com/mesharc-org/mesharc-python), published on PyPI as [`mesharc`](https://pypi.org/project/mesharc/), and the hosted one runs at `https://mcp.mesharc.dev/mcp`. Report issues with the server in this repository or in mesharc-python.
+The server is `mesharc/mcp.py` in [mesharc-org/mesharc-python](https://github.com/mesharc-org/mesharc-python), published on PyPI as [`mesharc`](https://pypi.org/project/mesharc/), and the hosted one runs at `https://mcp.mesharc.dev/mcp`. This repository runs it: `server.py` starts it from that package, and the `Dockerfile` builds it.
+
+```bash
+docker build -t mesharc-mcp .
+docker run -i --rm -e MESHARC_API_KEY=mesharc_... mesharc-mcp
+```
+
+Report issues with the server in this repository or in mesharc-python.
 
 ## Links
 
