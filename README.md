@@ -1,6 +1,6 @@
 # MeshArc MCP Server
 
-MeshArc turns any website into clean markdown your assistant can read, and keeps a record of what changed on it. It gives Claude, Cursor and any MCP client 19 tools to read pages, map and crawl sites, watch a site over time and ask what changed, all in plain English. Add it by URL, with nothing to install.
+MeshArc turns any website into clean markdown your assistant can read, and keeps a record of what changed on it. It gives Claude, Cursor and any MCP client 15 tools to read pages, map and crawl sites, watch a site over time and ask what changed, all in plain English. Add it by URL, with nothing to install.
 
 The **free plan includes 1,000 credits with no card**, and a plain fetch costs 1 credit.
 
@@ -8,7 +8,7 @@ The **free plan includes 1,000 credits with no card**, and a plain fetch costs 1
 https://mcp.mesharc.dev/mcp
 ```
 
-[![Glama score](https://glama.ai/mcp/connectors/dev.mesharc/mesharc/badges/score.svg)](https://glama.ai/mcp/connectors/dev.mesharc/mesharc) ![MCP remote, streamable HTTP](https://img.shields.io/badge/MCP-remote%20%7C%20streamable%20HTTP-6366f1?style=flat-square) ![tools 19](https://img.shields.io/badge/tools-19-10b981?style=flat-square) [![PyPI](https://img.shields.io/pypi/v/mesharc?style=flat-square&logo=pypi&logoColor=white&label=PyPI&color=3775a9)](https://pypi.org/project/mesharc/) ![license MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
+[![Glama score](https://glama.ai/mcp/connectors/dev.mesharc/mesharc/badges/score.svg)](https://glama.ai/mcp/connectors/dev.mesharc/mesharc) ![MCP remote, streamable HTTP](https://img.shields.io/badge/MCP-remote%20%7C%20streamable%20HTTP-6366f1?style=flat-square) ![tools 15](https://img.shields.io/badge/tools-15-10b981?style=flat-square) [![PyPI](https://img.shields.io/pypi/v/mesharc?style=flat-square&logo=pypi&logoColor=white&label=PyPI&color=3775a9)](https://pypi.org/project/mesharc/) ![license MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
 
 ## Contents
 
@@ -95,11 +95,11 @@ These conversations were run against real sites; the results are the real ones.
 
 - "Get Linear's pricing page and list every tier and price." The assistant used `scrape_urls`: 1 credit and 4 seconds for the four tiers.
 - "How many pages does the FastAPI docs site have, and which are about security?" The assistant used `map_site`: 151 URLs declared, 9 under /tutorial/security/, with no page fetched.
-- "Set up a project for hotspotseo.com that only scrapes the blog, weekly." The assistant used `describe_project_config`, `map_site` and `create_project`. It found the blog under /blogs/, not /blog/, and the first run read only blog pages.
+- "Set up a project for hotspotseo.com that only scrapes the blog, weekly." The assistant used `get_project`, `map_site` and `create_project`. It found the blog under /blogs/, not /blog/, and the first run read only blog pages.
 - "Make it daily instead, and skip the tag and author pages." The assistant used `update_project`; the include setting stayed as it was.
-- "Re-check the home page and page 2 now. What changed?" The assistant used `recrawl_pages`, then `get_changes`.
+- "Re-check the home page and page 2 now. What changed?" The assistant used `start_run` with the two URLs, then `get_changes`.
 - "Read this arXiv paper (a PDF) and summarise the method." The assistant used `scrape_urls`: 6,036 words of text for 2 credits.
-- "Which of these pages mention GDPR?" The assistant used `search_pages` on the stored crawl, at no credit cost.
+- "Which of these pages mention GDPR?" The assistant used `list_pages` with a search, on the stored crawl, at no credit cost.
 
 ## Tools
 
@@ -107,8 +107,7 @@ These conversations were run against real sites; the results are the real ones.
 
 | Tool | What it does | Credits |
 |---|---|---|
-| `scrape_urls` | Content of 1 to 500 known URLs. PDF, Word and spreadsheet files are read as text. | per page |
-| `extract_url` | One URL with every format: raw html, head and extracted fields, images. Browser steps run first. | per page |
+| `scrape_urls` | Content of 1 to 500 known URLs; PDF, Word and spreadsheet files are read as text. `full=true` reads one URL with every format: raw html, head and extracted fields, images, and browser steps run first. | per page |
 | `map_site` | Every URL a site declares in its sitemaps, with its sections, without fetching a page. | 1 per sitemap file |
 | `crawl_site` | Crawl a site or a section once, with page limit, depth and path globs. You get an index plus excerpts. | per page |
 
@@ -116,18 +115,15 @@ These conversations were run against real sites; the results are the real ones.
 
 | Tool | What it does | Credits |
 |---|---|---|
-| `keep_crawl_as_project` | Turn a `crawl_site` crawl into a watched project, with nothing fetched again. | none |
-| `create_project` | A watched project from a URL, with any settings: one section, a schedule, a format. | none |
-| `describe_project_config` | Every setting an assistant can set, with its meaning and default. | none |
 | `list_projects` | The workspace's projects, with status and last run. | none |
-| `get_project` | One project's settings and state. | none |
+| `get_project` | One project's settings and state. With no id, every setting an assistant can set, with its meaning and default. | none |
+| `create_project` | A watched project from a URL, with any settings, or from a `crawl_site` crawl with nothing fetched again. | none |
 | `update_project` | Change the name, schedule or settings. Only the keys you give change. | none |
-| `start_run` | Crawl a project now. You can wait for it to finish. | per page |
-| `recrawl_pages` | Fetch listed pages of a project again now, compared with the last full run. | per page |
+| `delete_project` | Delete a project and its history once its name is repeated back. Needs an admin API key, so it works locally only. | none |
+| `start_run` | Crawl a project now, or only the pages listed, compared with the last full run. You can wait for it to finish. | per page |
 | `list_runs` | A project's runs, newest first. | none |
-| `list_pages` | A run's pages: url, status, depth, words, when changed. | none |
+| `list_pages` | A run's pages: url, status, depth, words, when changed. With `q`, a search of them: words, a quoted phrase, or a CSS selector. | none |
 | `get_page` | One stored page in full, with its versions across runs. | none |
-| `search_pages` | Search a run's pages: words, a quoted phrase, or a CSS selector. | none |
 | `get_changes` | Pages added, modified and removed since the run before, with field changes. | none |
 
 **Long jobs**
@@ -137,7 +133,7 @@ These conversations were run against real sites; the results are the real ones.
 | `get_job` | Follow a crawl, run or batch that came back as a job, and get its result. | none |
 | `cancel_job` | Stop a crawl, run or batch that is still going. Pages already read stay. | none |
 
-Read-only tools are marked read-only, and the two that overwrite or stop work are marked destructive.
+Every tool has an output schema describing its answer. Read-only tools are marked read-only, and the three that overwrite, stop or delete are marked destructive.
 
 ## Errors and failure paths
 
@@ -145,7 +141,7 @@ Read-only tools are marked read-only, and the two that overwrite or stop work ar
 - **Read-only connections:** any tool that fetches or changes something answers `code: read_only`, with how to reconnect with write access.
 - **Long work:** a crawl, run or batch that outlasts the connection's time limit comes back as a job. `get_job` picks it up, and calling the original tool again returns the same job rather than starting a second one.
 - **Out of credits:** `402`. A run that uses up the budget stops and keeps what it read.
-- **A run already going:** `start_run` and `recrawl_pages` answer `409`; `list_runs` shows it and `cancel_job` stops it.
+- **A run already going:** `start_run` answers `409`; `list_runs` shows it and `cancel_job` stops it.
 - **Plan limits:** `create_project` answers `plan_limit` when the plan's project count is full; values above a plan's caps are lowered to them.
 - **Settings:** an unknown config key is refused by name, never silently dropped.
 - **Size:** a many-page answer is an index plus excerpts inside 60,000 characters; any one page comes back whole (each body up to 12,000 characters) on request.
@@ -161,9 +157,9 @@ Read-only tools are marked read-only, and the two that overwrite or stop work ar
 ## Tool selection
 
 - You have the URLs → `scrape_urls`. You need to find them → `map_site` (cheap, declared URLs only) or `crawl_site` (follows links).
-- One page with clicks, structured fields or every format → `extract_url`.
+- One page with clicks, structured fields or every format → `scrape_urls` with `full=true`.
 - You want to know what changes over time → `create_project`, then `start_run` and `get_changes`.
-- You want to read what was already crawled, at no cost → `list_pages`, `get_page`, `search_pages`, `get_changes`.
+- You want to read what was already crawled, at no cost → `list_pages` (with or without `q`), `get_page`, `get_changes`.
 
 ## How it compares
 
@@ -195,7 +191,7 @@ Yes, by default (`respect_robots`).
 
 ### Can it change my projects?
 
-Only if you allowed write access when you connected it.
+Only if you allowed write access when you connected it. Deleting a project also needs an admin API key, which a connected app never holds.
 
 ### Which clients work?
 

@@ -8,7 +8,7 @@
     "url": "https://github.com/mesharc-org/mesharc-mcp",
     "source": "github"
   },
-  "version": "0.3.4",
+  "version": "0.4.0",
   "remotes": [
     {
       "type": "streamable-http",
