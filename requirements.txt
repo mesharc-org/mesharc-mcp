@@ -1,1 +1,1 @@
-mesharc[mcp]==0.4.0
+mesharc[mcp]==0.6.0
