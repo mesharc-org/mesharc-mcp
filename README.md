@@ -1,6 +1,6 @@
 # MeshArc MCP Server
 
-MeshArc turns any website into clean markdown your assistant can read, and keeps a record of what changed on it. It gives Claude, Cursor and any MCP client 15 tools to read pages, map and crawl sites, watch a site over time and ask what changed, all in plain English. Add it by URL, with nothing to install.
+MeshArc turns any website into clean markdown your assistant can read, and keeps a record of what changed on it. It gives Claude, Cursor and any MCP client 15 tools to search the web, read pages, map and crawl sites, watch a site over time and ask what changed, all in plain English. Add it by URL, with nothing to install.
 
 The **free plan includes 1,000 credits with no card**, and a plain fetch costs 1 credit.
 
@@ -28,6 +28,7 @@ https://mcp.mesharc.dev/mcp
 
 ## What can you do with it?
 
+- **Search the web.** Ranked results, each with its title, URL and snippet, read from Google's results page (Bing's when Google refuses). Keep it to some sites or leave some out, and read each result's page as markdown in the same call.
 - **Read any page as clean markdown.** Pass one URL or up to 500. Navigation, cookie banners and boilerplate are stripped. PDF, Word and spreadsheet links are read as text.
 - **Get past walled sites.** Each page climbs a fetch ladder: a plain request first, then a real browser, then stealth and residential exits only when the page needs them. You pay for the rung that worked. A page the site refuses comes back marked as blocked, and costs nothing.
 - **Map a site before you fetch it.** Every URL a site declares in its sitemaps, with its sections, without fetching a single page.
@@ -110,6 +111,7 @@ These conversations were run against real sites; the results are the real ones.
 | `scrape_urls` | Content of 1 to 500 known URLs; PDF, Word and spreadsheet files are read as text. `full=true` reads one URL with every format: raw html, head and extracted fields, images, and browser steps run first. | per page |
 | `map_site` | Every URL a site declares in its sitemaps, with its sections, without fetching a page. | 1 per sitemap file |
 | `crawl_site` | Crawl a site or a section once, with page limit, depth and path globs. You get an index plus excerpts. | per page |
+| `search_web` | Ranked results for a query (title, URL, snippet) from Google's results page, or Bing's when Google refuses. `include_domains` / `exclude_domains` keep it to sites; `scrape=true` also reads each result's page as markdown. | 4 or more per results page (1 from Bing); a refused page is free and an equal search within an hour comes from cache; scraped pages per page |
 
 **Watch a site over time**
 
@@ -122,15 +124,14 @@ These conversations were run against real sites; the results are the real ones.
 | `delete_project` | Delete a project and its history once its name is repeated back. Needs an admin API key, so it works locally only. | none |
 | `start_run` | Crawl a project now, or only the pages listed, compared with the last full run. You can wait for it to finish. | per page |
 | `list_runs` | A project's runs, newest first. | none |
-| `list_pages` | A run's pages: url, status, depth, words, when changed. With `q`, a search of them: words, a quoted phrase, or a CSS selector. | none |
-| `get_page` | One stored page in full, with its versions across runs. | none |
+| `list_pages` | A run's pages: url, status, depth, words, when changed. With `q`, a search of them: words, a quoted phrase, or a CSS selector. With `url`, one stored page in full, with its versions across runs. | none |
 | `get_changes` | Pages added, modified and removed since the run before, with field changes. | none |
 
 **Long jobs**
 
 | Tool | What it does | Credits |
 |---|---|---|
-| `get_job` | Follow a crawl, run or batch that came back as a job, and get its result. | none |
+| `get_job` | Follow a crawl, run, batch or web search that came back as a job, and get its result. | none |
 | `cancel_job` | Stop a crawl, run or batch that is still going. Pages already read stay. | none |
 
 Every tool has an output schema describing its answer. Read-only tools are marked read-only, and the three that overwrite, stop or delete are marked destructive.
@@ -139,7 +140,7 @@ Every tool has an output schema describing its answer. Read-only tools are marke
 
 - **Blocked is not missing.** A page the site refuses is reported as `blocked` (or `captcha`, `timeout`, `missing` for a 404 or 410), never as an empty page, and none of them is charged.
 - **Read-only connections:** any tool that fetches or changes something answers `code: read_only`, with how to reconnect with write access.
-- **Long work:** a crawl, run or batch that outlasts the connection's time limit comes back as a job. `get_job` picks it up, and calling the original tool again returns the same job rather than starting a second one.
+- **Long work:** a crawl, run, batch or web search that outlasts the connection's time limit comes back as a job. `get_job` picks it up, and calling the original tool again returns the same job rather than starting a second one.
 - **Out of credits:** `402`. A run that uses up the budget stops and keeps what it read.
 - **A run already going:** `start_run` answers `409`; `list_runs` shows it and `cancel_job` stops it.
 - **Plan limits:** `create_project` answers `plan_limit` when the plan's project count is full; values above a plan's caps are lowered to them.
@@ -151,15 +152,15 @@ Every tool has an output schema describing its answer. Read-only tools are marke
 - **Free:** 1,000 credits once, with no card. 2 projects, 500 pages per run, and 7-day retention.
 - **Paid plans:** Starter $29/mo (100,000 credits), Growth $99/mo (500,000 credits, stealth tier), Scale $349/mo (2,500,000 credits), and Enterprise.
 - **A credit:** a plain fetch costs 1, a fetch with a site's session 2, a real Chrome 4, a residential address 16, a solved widget 22.
-- **Free of charge:** a refused page, a 404 or 410, a cached page, change detection, search, and listing and reading what is stored.
+- **Free of charge:** a refused page, a 404 or 410, a cached page, a results page the engines refused, change detection, and listing, searching and reading what is stored.
 - The MCP server itself costs nothing extra. A tool call is an ordinary request through your account, with the same credits, limits and rate.
 
 ## Tool selection
 
-- You have the URLs → `scrape_urls`. You need to find them → `map_site` (cheap, declared URLs only) or `crawl_site` (follows links).
+- You have the URLs → `scrape_urls`. You need to find them on one site → `map_site` (cheap, declared URLs only) or `crawl_site` (follows links). You need them from the whole web → `search_web`.
 - One page with clicks, structured fields or every format → `scrape_urls` with `full=true`.
 - You want to know what changes over time → `create_project`, then `start_run` and `get_changes`.
-- You want to read what was already crawled, at no cost → `list_pages` (with or without `q`), `get_page`, `get_changes`.
+- You want to read what was already crawled, at no cost → `list_pages` (with `q` to search it, with `url` for one page in full), `get_changes`.
 
 ## How it compares
 
@@ -169,11 +170,11 @@ Every tool has an output schema describing its answer. Read-only tools are marke
 | 404 billed | Yes | No |
 | Cheaper repeat reads of protected sites | No | Yes, session reuse at 2 credits |
 | Website change monitoring | Yes (Monitor) | Yes, with sitemap sections and held-back removals |
-| Web search API | Yes | No |
+| Web search API | Yes | Yes (`search_web`: Google, Bing when Google refuses) |
 | Autonomous agent / browser interaction | Yes | Browser steps only |
 | Open source | Yes | No |
 
-Checked against public documentation and pricing pages. If you need web search or an autonomous research agent, Firecrawl is the stronger fit.
+Checked against public documentation and pricing pages. If you need an autonomous research agent from your MCP client today, Firecrawl is the stronger fit.
 
 ## FAQ
 
