@@ -1,4 +1,4 @@
-# MeshArc MCP Server
+# MeshArc web crawler
 
 MeshArc turns any website into clean markdown your assistant can read, and keeps a record of what changed on it. It gives Claude, Cursor and any MCP client 15 tools to search the web, read pages, map and crawl sites, watch a site over time and ask what changed, all in plain English. Add it by URL, with nothing to install.
 
