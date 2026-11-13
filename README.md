@@ -1,6 +1,6 @@
 # MeshArc web crawler
 
-MeshArc turns any website into clean markdown your assistant can read, and keeps a record of what changed on it. It gives Claude, Cursor and any MCP client 15 tools to search the web, read pages, map and crawl sites, watch a site over time and ask what changed, all in plain English. Add it by URL, with nothing to install.
+MeshArc turns any website into clean markdown your assistant can read, and keeps a record of what changed on it. It gives Claude, Cursor and any MCP client 21 tools to search the web, read pages, map and crawl sites, watch a site over time and ask what changed, hand a research question to an agent, and keep a search or a question on a schedule, all in plain English. Add it by URL, with nothing to install.
 
 The **free plan includes 1,000 credits with no card**, and a plain fetch costs 1 credit.
 
@@ -8,7 +8,7 @@ The **free plan includes 1,000 credits with no card**, and a plain fetch costs 1
 https://mcp.mesharc.dev/mcp
 ```
 
-[![Glama score](https://glama.ai/mcp/connectors/dev.mesharc/mesharc/badges/score.svg)](https://glama.ai/mcp/connectors/dev.mesharc/mesharc) ![MCP remote, streamable HTTP](https://img.shields.io/badge/MCP-remote%20%7C%20streamable%20HTTP-6366f1?style=flat-square) ![tools 15](https://img.shields.io/badge/tools-15-10b981?style=flat-square) [![PyPI](https://img.shields.io/pypi/v/mesharc?style=flat-square&logo=pypi&logoColor=white&label=PyPI&color=3775a9)](https://pypi.org/project/mesharc/) ![license MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
+[![Glama score](https://glama.ai/mcp/connectors/dev.mesharc/mesharc/badges/score.svg)](https://glama.ai/mcp/connectors/dev.mesharc/mesharc) ![MCP remote, streamable HTTP](https://img.shields.io/badge/MCP-remote%20%7C%20streamable%20HTTP-6366f1?style=flat-square) ![tools 21](https://img.shields.io/badge/tools-21-10b981?style=flat-square) [![PyPI](https://img.shields.io/pypi/v/mesharc?style=flat-square&logo=pypi&logoColor=white&label=PyPI&color=3775a9)](https://pypi.org/project/mesharc/) ![license MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
 
 ## Contents
 
@@ -29,13 +29,15 @@ https://mcp.mesharc.dev/mcp
 ## What can you do with it?
 
 - **Search the web.** Ranked results, each with its title, URL and snippet, read from Google's results page (Bing's when Google refuses). Keep it to some sites or leave some out, and read each result's page as markdown in the same call.
-- **Read any page as clean markdown.** Pass one URL or up to 500. Navigation, cookie banners and boilerplate are stripped. PDF, Word and spreadsheet links are read as text.
+- **Read any page as clean markdown.** Pass one URL or up to 500. Navigation, cookie banners and boilerplate are stripped. PDF and Word links are read as text.
 - **Get past walled sites.** Each page climbs a fetch ladder: a plain request first, then a real browser, then stealth and residential exits only when the page needs them. You pay for the rung that worked. A page the site refuses comes back marked as blocked, and costs nothing.
 - **Map a site before you fetch it.** Every URL a site declares in its sitemaps, with its sections, without fetching a single page.
 - **Crawl a whole site or one section.** Use path globs such as `/blog/*`, with a page limit and a depth. You get an index of every page plus readable excerpts, sized to fit a chat turn.
 - **Watch a site over time.** Make it a project, put it on a schedule, and ask "what changed?". You get pages added, modified and removed, and field-level changes. Removals are held back when a run reached too little of the site, so a blocked crawl never reports a site as gone.
 - **Run browser steps.** Click "Load more" until it disappears, type into a search box, pick an option, then read the page.
 - **Extract structured fields.** Give a JSON schema and get the same fields from every page.
+- **Ask a research question.** An agent searches, maps sites and reads pages on its own, then answers with the pages it used, in the shape of a schema if you give one. You set its credit cap.
+- **Keep a search or a question on a schedule.** It runs again hourly, daily or weekly and tells you what is new, what dropped and what changed, down to each record of a list answer.
 
 ## What you need
 
@@ -108,10 +110,10 @@ These conversations were run against real sites; the results are the real ones.
 
 | Tool | What it does | Credits |
 |---|---|---|
-| `scrape_urls` | Content of 1 to 500 known URLs; PDF, Word and spreadsheet files are read as text. `full=true` reads one URL with every format: raw html, head and extracted fields, images, and browser steps run first. | per page |
+| `scrape_urls` | Content of 1 to 500 known URLs; PDF and Word files are read as text. `full=true` reads one URL with every format: raw html, head and extracted fields, images, and browser steps run first. | per page |
 | `map_site` | Every URL a site declares in its sitemaps, with its sections, without fetching a page. | 1 per sitemap file |
 | `crawl_site` | Crawl a site or a section once, with page limit, depth and path globs. You get an index plus excerpts. | per page |
-| `search_web` | Ranked results for a query (title, URL, snippet) from Google's results page, or Bing's when Google refuses. `include_domains` / `exclude_domains` keep it to sites; `scrape=true` also reads each result's page as markdown. | 4 or more per results page (1 from Bing); a refused page is free and an equal search within an hour comes from cache; scraped pages per page |
+| `search_web` | Ranked results for a query (title, URL, snippet) from Google's results page, or Bing's when Google refuses. `include_domains` / `exclude_domains` keep it to sites; `scrape=true` also reads each result's page as markdown. | At most 4 per search (1 when Bing answers); a refused page is free and an equal search within an hour comes from cache; scraped pages per page |
 
 **Watch a site over time**
 
@@ -127,12 +129,23 @@ These conversations were run against real sites; the results are the real ones.
 | `list_pages` | A run's pages: url, status, depth, words, when changed. With `q`, a search of them: words, a quoted phrase, or a CSS selector. With `url`, one stored page in full, with its versions across runs. | none |
 | `get_changes` | Pages added, modified and removed since the run before, with field changes. | none |
 
+**Research and monitors**
+
+| Tool | What it does | Credits |
+|---|---|---|
+| `run_agent` | Hand a research question to an agent that searches, maps sites and reads pages on its own, then answers with the sources it used; a `schema` shapes the answer. It comes back as a job. | pages as read, plus the model's tokens at cost + 20%, within `max_credits` (2,000 by default) |
+| `continue_agent` | Carry on an agent run that stopped at its credit limit, with a new budget; the pages it read are not paid for again. | as `run_agent` |
+| `create_monitor` | Keep a web search or an agent question and run it again hourly, daily or weekly, each run compared with the last: new, dropped and moved results, or the answer's changed values. | each run as the search or agent run it is |
+| `list_monitors` | The workspace's monitors with schedule, spend and what the last run found; or one monitor with its runs. | none |
+| `pause_monitor` | Pause a monitor, or resume it. Nothing is deleted. | none |
+| `get_monitor_rows` | An agent monitor's records, one per item its answer lists, and what moved: added, changed (before and after), gone. | none |
+
 **Long jobs**
 
 | Tool | What it does | Credits |
 |---|---|---|
-| `get_job` | Follow a crawl, run, batch or web search that came back as a job, and get its result. | none |
-| `cancel_job` | Stop a crawl, run or batch that is still going. Pages already read stay. | none |
+| `get_job` | Follow a crawl, run, batch, web search or agent run that came back as a job, and get its result. | none |
+| `cancel_job` | Stop a crawl, run, batch or agent run that is still going. Pages already read stay. | none |
 
 Every tool has an output schema describing its answer. Read-only tools are marked read-only, and the three that overwrite, stop or delete are marked destructive.
 
@@ -161,6 +174,8 @@ Every tool has an output schema describing its answer. Read-only tools are marke
 - One page with clicks, structured fields or every format → `scrape_urls` with `full=true`.
 - You want to know what changes over time → `create_project`, then `start_run` and `get_changes`.
 - You want to read what was already crawled, at no cost → `list_pages` (with `q` to search it, with `url` for one page in full), `get_changes`.
+- A question that needs several pages or sites to answer → `run_agent`. When you know what to fetch, `search_web` and `scrape_urls` are quicker and cheaper.
+- You want to keep watching a search or a question (mentions, rankings, a competitor's prices) → `create_monitor`. To watch a whole site's pages, use a project.
 
 ## How it compares
 
@@ -171,10 +186,10 @@ Every tool has an output schema describing its answer. Read-only tools are marke
 | Cheaper repeat reads of protected sites | No | Yes, session reuse at 2 credits |
 | Website change monitoring | Yes (Monitor) | Yes, with sitemap sections and held-back removals |
 | Web search API | Yes | Yes (`search_web`: Google, Bing when Google refuses) |
-| Autonomous agent / browser interaction | Yes | Browser steps only |
+| Autonomous agent / browser interaction | Yes | Yes (`run_agent`, and browser steps) |
 | Open source | Yes | No |
 
-Checked against public documentation and pricing pages. If you need an autonomous research agent from your MCP client today, Firecrawl is the stronger fit.
+Checked against public documentation and pricing pages.
 
 ## FAQ
 
