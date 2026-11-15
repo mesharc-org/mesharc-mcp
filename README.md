@@ -1,6 +1,6 @@
 # MeshArc web crawler
 
-MeshArc turns any website into clean markdown your assistant can read, and keeps a record of what changed on it. It gives Claude, Cursor and any MCP client 21 tools to search the web, read pages, map and crawl sites, watch a site over time and ask what changed, hand a research question to an agent, and keep a search or a question on a schedule, all in plain English. Add it by URL, with nothing to install.
+MeshArc turns any website into clean markdown your assistant can read, and keeps a record of what changed on it. It gives Claude, Cursor and any MCP client 22 tools to search the web, read pages, map and crawl sites, watch a site over time and ask what changed, hand a research question to an agent, and keep a search or a question on a schedule, all in plain English. Add it by URL, with nothing to install.
 
 The **free plan includes 1,000 credits with no card**, and a plain fetch costs 1 credit.
 
@@ -8,7 +8,7 @@ The **free plan includes 1,000 credits with no card**, and a plain fetch costs 1
 https://mcp.mesharc.dev/mcp
 ```
 
-[![Glama score](https://glama.ai/mcp/connectors/dev.mesharc/mesharc/badges/score.svg)](https://glama.ai/mcp/connectors/dev.mesharc/mesharc) ![MCP remote, streamable HTTP](https://img.shields.io/badge/MCP-remote%20%7C%20streamable%20HTTP-6366f1?style=flat-square) ![tools 21](https://img.shields.io/badge/tools-21-10b981?style=flat-square) [![PyPI](https://img.shields.io/pypi/v/mesharc?style=flat-square&logo=pypi&logoColor=white&label=PyPI&color=3775a9)](https://pypi.org/project/mesharc/) ![license MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
+[![Glama score](https://glama.ai/mcp/connectors/dev.mesharc/mesharc/badges/score.svg)](https://glama.ai/mcp/connectors/dev.mesharc/mesharc) ![MCP remote, streamable HTTP](https://img.shields.io/badge/MCP-remote%20%7C%20streamable%20HTTP-6366f1?style=flat-square) ![tools 22](https://img.shields.io/badge/tools-22-10b981?style=flat-square) [![PyPI](https://img.shields.io/pypi/v/mesharc?style=flat-square&logo=pypi&logoColor=white&label=PyPI&color=3775a9)](https://pypi.org/project/mesharc/) ![license MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
 
 ## Contents
 
@@ -124,6 +124,7 @@ These conversations were run against real sites; the results are the real ones.
 | `create_project` | A watched project from a URL, with any settings, or from a `crawl_site` crawl with nothing fetched again. | none |
 | `update_project` | Change the name, schedule or settings. Only the keys you give change. | none |
 | `delete_project` | Delete a project and its history once its name is repeated back. Needs an admin API key, so it works locally only. | none |
+| `archive_project` | Archive a project once its name is repeated back: it stops running, no longer counts toward the plan's projects, and is deleted after 30 days unless restored in the app. Works for a connected app, which cannot delete. | none |
 | `start_run` | Crawl a project now, or only the pages listed, compared with the last full run. You can wait for it to finish. | per page |
 | `list_runs` | A project's runs, newest first. | none |
 | `list_pages` | A run's pages: url, status, depth, words, when changed. With `q`, a search of them: words, a quoted phrase, or a CSS selector. With `url`, one stored page in full, with its versions across runs. | none |
@@ -147,7 +148,7 @@ These conversations were run against real sites; the results are the real ones.
 | `get_job` | Follow a crawl, run, batch, web search or agent run that came back as a job, and get its result. | none |
 | `cancel_job` | Stop a crawl, run, batch or agent run that is still going. Pages already read stay. | none |
 
-Every tool has an output schema describing its answer. Read-only tools are marked read-only, and the three that overwrite, stop or delete are marked destructive.
+Every tool has an output schema describing its answer. Read-only tools are marked read-only, and the four that overwrite, archive, stop or delete are marked destructive.
 
 ## Errors and failure paths
 
