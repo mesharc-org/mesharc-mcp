@@ -1,6 +1,6 @@
 # MeshArc web crawler
 
-MeshArc turns any website into clean markdown your assistant can read, and keeps a record of what changed on it. It gives Claude, Cursor and any MCP client 22 tools to search the web, read pages, map and crawl sites, watch a site over time and ask what changed, hand a research question to an agent, and keep a search or a question on a schedule, all in plain English. Add it by URL, with nothing to install.
+MeshArc turns any website into clean markdown your assistant can read, and keeps a record of what changed on it. It gives Claude, Cursor and any MCP client 23 tools to search the web, read pages, take a screenshot of a page, map and crawl sites, watch a site over time and ask what changed, hand a research question to an agent, and keep a search or a question on a schedule, all in plain English. Add it by URL, with nothing to install.
 
 The **free plan includes 1,000 credits with no card**, and a plain fetch costs 1 credit.
 
@@ -8,7 +8,7 @@ The **free plan includes 1,000 credits with no card**, and a plain fetch costs 1
 https://mcp.mesharc.dev/mcp
 ```
 
-[![Glama score](https://glama.ai/mcp/connectors/dev.mesharc/mesharc/badges/score.svg)](https://glama.ai/mcp/connectors/dev.mesharc/mesharc) ![MCP remote, streamable HTTP](https://img.shields.io/badge/MCP-remote%20%7C%20streamable%20HTTP-6366f1?style=flat-square) ![tools 22](https://img.shields.io/badge/tools-22-10b981?style=flat-square) [![PyPI](https://img.shields.io/pypi/v/mesharc?style=flat-square&logo=pypi&logoColor=white&label=PyPI&color=3775a9)](https://pypi.org/project/mesharc/) ![license MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
+[![Glama score](https://glama.ai/mcp/connectors/dev.mesharc/mesharc/badges/score.svg)](https://glama.ai/mcp/connectors/dev.mesharc/mesharc) ![MCP remote, streamable HTTP](https://img.shields.io/badge/MCP-remote%20%7C%20streamable%20HTTP-6366f1?style=flat-square) ![tools 23](https://img.shields.io/badge/tools-23-10b981?style=flat-square) [![PyPI](https://img.shields.io/pypi/v/mesharc?style=flat-square&logo=pypi&logoColor=white&label=PyPI&color=3775a9)](https://pypi.org/project/mesharc/) ![license MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
 
 ## Contents
 
@@ -30,6 +30,7 @@ https://mcp.mesharc.dev/mcp
 
 - **Search the web.** Ranked results, each with its title, URL and snippet, read from Google's results page (DuckDuckGo's and then Bing's when Google refuses or reads short). Keep it to some sites or leave some out, and read each result's page as markdown in the same call.
 - **Read any page as clean markdown.** Pass one URL or up to 500. Navigation, cookie banners and boilerplate are stripped. PDF and Word links are read as text.
+- **See a page as a person does.** A screenshot of one page, desktop or mobile, after browser steps if needed, handed to the assistant as an image.
 - **Get past walled sites.** Each page climbs a fetch ladder: a plain request first, then a real browser, then stealth and residential exits only when the page needs them. You pay for the rung that worked. A page the site refuses comes back marked as blocked, and costs nothing.
 - **Map a site before you fetch it.** Every URL a site declares in its sitemaps, with its sections, without fetching a single page.
 - **Crawl a whole site or one section.** Use path globs such as `/blog/*`, with a page limit and a depth. You get an index of every page plus readable excerpts, sized to fit a chat turn.
@@ -111,6 +112,7 @@ These conversations were run against real sites; the results are the real ones.
 | Tool | What it does | Credits |
 |---|---|---|
 | `scrape_urls` | Content of 1 to 500 known URLs; PDF and Word files are read as text. `full=true` reads one URL with every format: raw html, head and extracted fields, images, and browser steps run first. | per page |
+| `screenshot_url` | A picture of one page (JPEG, the visible window) as image content, with its title and cost: `viewport` desktop or mobile, browser `actions` first, a `wait_ms`. No picture comes back as `no_screenshot` with the browser's reason. | 5 (4 for the browser, 1 for the picture); a refused page is free |
 | `map_site` | Every URL a site declares in its sitemaps, with its sections, without fetching a page. | 1 per sitemap file |
 | `crawl_site` | Crawl a site or a section once, with page limit, depth and path globs. You get an index plus excerpts. | per page |
 | `search_web` | Ranked results for a query (title, URL, snippet) from Google's results page, or DuckDuckGo's and then Bing's when Google refuses or reads short. `include_domains` / `exclude_domains` keep it to sites; `scrape=true` also reads each result's page as markdown. | At most 4 per search (1 when DuckDuckGo or Bing answers alone); a refused page is free and an equal search within an hour comes from cache; scraped pages per page |
@@ -173,6 +175,7 @@ Every tool has an output schema describing its answer. Read-only tools are marke
 
 - You have the URLs → `scrape_urls`. You need to find them on one site → `map_site` (cheap, declared URLs only) or `crawl_site` (follows links). You need them from the whole web → `search_web`.
 - One page with clicks, structured fields or every format → `scrape_urls` with `full=true`.
+- What a page looks like (its layout, a chart, a banner) → `screenshot_url`.
 - You want to know what changes over time → `create_project`, then `start_run` and `get_changes`.
 - You want to read what was already crawled, at no cost → `list_pages` (with `q` to search it, with `url` for one page in full), `get_changes`.
 - A question that needs several pages or sites to answer → `run_agent`. When you know what to fetch, `search_web` and `scrape_urls` are quicker and cheaper.
