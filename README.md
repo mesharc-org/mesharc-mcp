@@ -150,6 +150,9 @@ These conversations were run against real sites; the results are the real ones.
 | `get_job` | Follow a crawl, run, batch, web search or agent run that came back as a job, and get its result. | none |
 | `cancel_job` | Stop a crawl, run, batch or agent run that is still going. Pages already read stay. | none |
 
+<!-- tools:other:start - a release lists here any tool the tables above do not have yet; give it a row above to replace it -->
+<!-- tools:other:end -->
+
 Every tool has an output schema describing its answer. Read-only tools are marked read-only, and the four that overwrite, archive, stop or delete are marked destructive.
 
 ## Errors and failure paths
