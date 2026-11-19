@@ -1,0 +1,167 @@
+{
+  "version": "0.7.10",
+  "count": 23,
+  "tools": [
+    {
+      "name": "scrape_urls",
+      "title": "Scrape pages by URL",
+      "summary": "Fetch pages whose URLs you already have and return their content. No project is created.",
+      "readOnly": false,
+      "destructive": false
+    },
+    {
+      "name": "screenshot_url",
+      "title": "Take a screenshot of a page",
+      "summary": "Render one page in a browser and return a picture of it (JPEG, the visible window), with its title and what it cost.",
+      "readOnly": false,
+      "destructive": false
+    },
+    {
+      "name": "map_site",
+      "title": "Map a site's declared URLs",
+      "summary": "List the URLs a site declares in its sitemaps (found through robots.txt and the well-known paths, each index file walked to its children) without fetching any page.",
+      "readOnly": false,
+      "destructive": false
+    },
+    {
+      "name": "crawl_site",
+      "title": "Crawl a whole site once",
+      "summary": "Crawl a site once from a start URL, following links and the sitemap, and return the pages read. No project is set up.",
+      "readOnly": false,
+      "destructive": false
+    },
+    {
+      "name": "search_web",
+      "title": "Search the web",
+      "summary": "Search the web for a query and return the ranked results, each with its title, url and snippet. The results are read from Google's results page; when Google refuses or reads short, from DuckDuckGo's and then Bing's, and the answer with most results about the query is given, topped up from the others.",
+      "readOnly": false,
+      "destructive": false
+    },
+    {
+      "name": "run_agent",
+      "title": "Run a research agent",
+      "summary": "Hand a research question to an agent that searches the web, maps sites and reads pages on its own, then answers with the sources it used.",
+      "readOnly": false,
+      "destructive": false
+    },
+    {
+      "name": "continue_agent",
+      "title": "Continue a stopped agent run",
+      "summary": "Carry on an agent run that stopped at its credit limit (status credit_limit) with a new budget. It starts a new run on the same thread that resumes where the stopped one was, keeps the pages it read and answers in full.",
+      "readOnly": false,
+      "destructive": false
+    },
+    {
+      "name": "create_monitor",
+      "title": "Keep a search or question on a schedule",
+      "summary": "Keep a web search or an agent question and run it again on a schedule, each run compared with the last one that answered: new, dropped and moved results for a search, the answer's added, changed and removed values for a question.",
+      "readOnly": false,
+      "destructive": false
+    },
+    {
+      "name": "list_monitors",
+      "title": "List monitors and their runs",
+      "summary": "List the workspace's monitors -- searches and agent questions kept on a schedule -- each with its schedule, status, next run, this month's spend and what its last run found; or, with monitor_id, one monitor with its latest runs.",
+      "readOnly": true,
+      "destructive": false
+    },
+    {
+      "name": "pause_monitor",
+      "title": "Pause or resume a monitor",
+      "summary": "Pause a monitor so it makes no more scheduled runs, or resume it.",
+      "readOnly": false,
+      "destructive": false
+    },
+    {
+      "name": "get_monitor_rows",
+      "title": "Read a monitor's records",
+      "summary": "Read the records an agent monitor follows -- one per item its answer lists, e.g. each plan of a pricing page -- as they stand, with the page each value was read on; and, with changes=true, what moved: records added, a column changed (before and after), records gone.",
+      "readOnly": true,
+      "destructive": false
+    },
+    {
+      "name": "list_projects",
+      "title": "List all projects",
+      "summary": "List every project in the workspace, the sites it watches over time, each with its id, name, host, schedule, page count, coverage, last run and status; and the workspace's plan and the credits it has left.",
+      "readOnly": true,
+      "destructive": false
+    },
+    {
+      "name": "get_project",
+      "title": "Get a project, or the settings",
+      "summary": "Read one project in full, or with no project_id the settings any project can take.",
+      "readOnly": true,
+      "destructive": false
+    },
+    {
+      "name": "create_project",
+      "title": "Create a watched project",
+      "summary": "Create a project: a site MeshArc re-crawls on a schedule, comparing each run with the last to record pages added, modified and removed.",
+      "readOnly": false,
+      "destructive": false
+    },
+    {
+      "name": "update_project",
+      "title": "Update a project's settings",
+      "summary": "Change a project's name, schedule or settings, its webhook among them, and send the webhook a test.",
+      "readOnly": false,
+      "destructive": true
+    },
+    {
+      "name": "delete_project",
+      "title": "Delete a project",
+      "summary": "Delete a project for good, with everything its runs stored.",
+      "readOnly": false,
+      "destructive": true
+    },
+    {
+      "name": "archive_project",
+      "title": "Archive a project",
+      "summary": "Archive a project: it stops running, no longer counts toward the plan's projects, and is deleted for good after 30 days unless someone restores it in the MeshArc app.",
+      "readOnly": false,
+      "destructive": true
+    },
+    {
+      "name": "start_run",
+      "title": "Start a project run now",
+      "summary": "Crawl a project's site now with its saved settings, or re-read only the pages you list. The run is compared with the one before it.",
+      "readOnly": false,
+      "destructive": false
+    },
+    {
+      "name": "list_runs",
+      "title": "List a project's runs",
+      "summary": "List a project's runs, newest first, with each run's id, status, trigger, pages read and pages changed.",
+      "readOnly": true,
+      "destructive": false
+    },
+    {
+      "name": "list_pages",
+      "title": "List, search or read a run's pages",
+      "summary": "List the pages a project run stored; with q, find the pages whose text or markup matches; with url, read one page in full, with its versions across runs.",
+      "readOnly": true,
+      "destructive": false
+    },
+    {
+      "name": "get_changes",
+      "title": "Get what changed in a run",
+      "summary": "Report what changed in a project run against the run just before it, or against any run you name: pages added, modified and removed, field changes, and coverage.",
+      "readOnly": true,
+      "destructive": false
+    },
+    {
+      "name": "get_job",
+      "title": "Follow a long-running job",
+      "summary": "Check on a crawl, run, batch, web search or agent run a tool handed back as a job, and return its result once finished.",
+      "readOnly": true,
+      "destructive": false
+    },
+    {
+      "name": "cancel_job",
+      "title": "Cancel a running job",
+      "summary": "Stop a crawl, run, batch or agent run that is still going.",
+      "readOnly": false,
+      "destructive": true
+    }
+  ]
+}
