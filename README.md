@@ -28,7 +28,7 @@ https://mcp.mesharc.dev/mcp
 
 ## What can you do with it?
 
-- **Search the web.** Ranked results, each with its title, URL and snippet, read from Google's results page (DuckDuckGo's and then Bing's when Google refuses or reads short). Keep it to some sites or leave some out, and read each result's page as markdown in the same call.
+- **Search the web.** Ranked organic results, each with its title, URL and snippet, at 8 credits a search. Keep it to some sites or leave some out, and read each result's page as markdown in the same call.
 - **Read any page as clean markdown.** Pass one URL or up to 500. Navigation, cookie banners and boilerplate are stripped. PDF and Word links are read as text.
 - **See a page as a person does.** A screenshot of one page, desktop or mobile, after browser steps if needed, handed to the assistant as an image.
 - **Get past walled sites.** Each page climbs a fetch ladder: a plain request first, then a real browser, then stealth and residential exits only when the page needs them. You pay for the rung that worked. A page the site refuses comes back marked as blocked, and costs nothing.
@@ -115,7 +115,7 @@ These conversations were run against real sites; the results are the real ones.
 | `screenshot_url` | A picture of one page (JPEG, the visible window) as image content, with its title and cost: `viewport` desktop or mobile, browser `actions` first, a `wait_ms`. No picture comes back as `no_screenshot` with the browser's reason. | 5 (4 for the browser, 1 for the picture); a refused page is free |
 | `map_site` | Every URL a site declares in its sitemaps, with its sections, without fetching a page. | 1 per sitemap file |
 | `crawl_site` | Crawl a site or a section once, with page limit, depth and path globs. You get an index plus excerpts. | per page |
-| `search_web` | Ranked results for a query (title, URL, snippet) from Google's results page, or DuckDuckGo's and then Bing's when Google refuses or reads short. `include_domains` / `exclude_domains` keep it to sites; `scrape=true` also reads each result's page as markdown. | At most 4 per search (1 when DuckDuckGo or Bing answers alone); a refused page is free and an equal search within an hour comes from cache; scraped pages per page |
+| `search_web` | Ranked organic results for a query (title, URL, snippet), 8 credits a search. `include_domains` / `exclude_domains` keep it to sites; `scrape=true` also reads each result's page as markdown. | At most 4 per search (1 when DuckDuckGo or Bing answers alone); a refused page is free and an equal search within an hour comes from cache; scraped pages per page |
 
 **Watch a site over time**
 
@@ -192,7 +192,7 @@ Every tool has an output schema describing its answer. Read-only tools are marke
 | 404 billed | Yes | No |
 | Cheaper repeat reads of protected sites | No | Yes, session reuse at 2 credits |
 | Website change monitoring | Yes (Monitor) | Yes, with sitemap sections and held-back removals |
-| Web search API | Yes | Yes (`search_web`: Google, then DuckDuckGo and Bing) |
+| Web search API | Yes | Yes (`search_web`) |
 | Autonomous agent / browser interaction | Yes | Yes (`run_agent`, and browser steps) |
 | Open source | Yes | No |
 
