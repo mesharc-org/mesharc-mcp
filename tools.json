@@ -1,5 +1,5 @@
 {
-  "version": "0.7.11",
+  "version": "0.7.12",
   "count": 23,
   "tools": [
     {
@@ -33,7 +33,7 @@
     {
       "name": "search_web",
       "title": "Search the web",
-      "summary": "Search the web for a query and return the ranked results, each with its title, url and snippet. The results are read from Google's results page; when Google refuses or reads short, from DuckDuckGo's and then Bing's, and the answer with most results about the query is given, topped up from the others.",
+      "summary": "Search the web for a query and return the ranked results, each with its title, url and snippet: organic web results, no ads or AI summaries.",
       "readOnly": false,
       "destructive": false
     },
