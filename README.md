@@ -8,7 +8,7 @@ The **free plan includes 1,000 credits with no card**, and a plain fetch costs 1
 https://mcp.mesharc.dev/mcp
 ```
 
-[![Glama score](https://glama.ai/mcp/connectors/dev.mesharc/mesharc/badges/score.svg)](https://glama.ai/mcp/connectors/dev.mesharc/mesharc) ![MCP remote, streamable HTTP](https://img.shields.io/badge/MCP-remote%20%7C%20streamable%20HTTP-6366f1?style=flat-square) ![tools 23](https://img.shields.io/badge/tools-23-10b981?style=flat-square) [![PyPI](https://img.shields.io/pypi/v/mesharc?style=flat-square&logo=pypi&logoColor=white&label=PyPI&color=3775a9)](https://pypi.org/project/mesharc/) ![license MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
+[![Glama score](https://glama.ai/mcp/connectors/dev.mesharc/mesharc/badges/score.svg)](https://glama.ai/mcp/connectors/dev.mesharc/mesharc) [![mesharc-org/mesharc-mcp MCP server](https://glama.ai/mcp/servers/mesharc-org/mesharc-mcp/badges/score.svg)](https://glama.ai/mcp/servers/mesharc-org/mesharc-mcp) ![MCP remote, streamable HTTP](https://img.shields.io/badge/MCP-remote%20%7C%20streamable%20HTTP-6366f1?style=flat-square) ![tools 23](https://img.shields.io/badge/tools-23-10b981?style=flat-square) [![PyPI](https://img.shields.io/pypi/v/mesharc?style=flat-square&logo=pypi&logoColor=white&label=PyPI&color=3775a9)](https://pypi.org/project/mesharc/) ![license MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
 
 ## Contents
 
